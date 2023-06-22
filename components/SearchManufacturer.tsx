@@ -12,6 +12,7 @@ const SearchManufacturer = ({
 }: SearchManufacturerProps) => {
   const [query, setQuery] = useState('');
 
+  console.log('car: ', query);
   const filteredManufacturers =
     query === ''
       ? manufacturers
@@ -24,7 +25,7 @@ const SearchManufacturer = ({
 
   return (
     <div className="search-manufacturer">
-      <Combobox>
+      <Combobox value={manufacturer} onChange={setManufacturer}>
         <div className="relative w-full">
           <Combobox.Button className="absolute top-[14px]">
             <Image
@@ -36,8 +37,7 @@ const SearchManufacturer = ({
             />
           </Combobox.Button>
 
-                  
-                  {/* input field for searching */}
+          {/* input field for searching */}
           <Combobox.Input
             className="search-manufacturer__input"
             placeholder="Volkswagen"
@@ -45,8 +45,7 @@ const SearchManufacturer = ({
             onChange={(e) => setQuery(e.target.value)}
           ></Combobox.Input>
 
-                  
-                  {/* transition  for displaying the options */}
+          {/* transition  for displaying the options */}
           <Transition
             as={Fragment}
             leave="transition ease-in duration-100"
@@ -54,20 +53,37 @@ const SearchManufacturer = ({
             leaveTo="opacity-0"
             afterLeave={() => setQuery('')}
           >
-                      <Combobox.Options>
-                          {filteredManufacturers.map((item) => (
-                              <Combobox.Option
-                                  key={item}
-                                  className={({ active }) =>
-                                      `relative search-manufacturer__option ${active ? "bg-primary-blue text-white" : "text-gray-900"
-                                      }`
-                                  }
-                                  value={item}
-                              >
-                                  
-                              </Combobox.Option>
-                          ))}
-           
+            <Combobox.Options>
+              {filteredManufacturers.map((item) => (
+                <Combobox.Option
+                  key={item}
+                  className={({ active }) =>
+                    `relative search-manufacturer__option ${
+                      active ? 'bg-primary-blue text-white' : 'text-gray-900'
+                    }`
+                  }
+                  value={item}
+                >
+                  {({ selected, active }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? 'font-medium' : 'font-normal'
+                        }`}
+                      >
+                        {item}
+                      </span>
+                      {selected ? (
+                        <span
+                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                            active ? 'text-white' : 'text-teal-600'
+                          }`}
+                        ></span>
+                      ) : null}
+                    </>
+                  )}
+                </Combobox.Option>
+              ))}
             </Combobox.Options>
           </Transition>
         </div>
@@ -78,7 +94,8 @@ const SearchManufacturer = ({
 
 export default SearchManufacturer;
 
-   {/* {filteredManufacturers.length === 0 && query !== ''
+{
+  /* {filteredManufacturers.length === 0 && query !== ''
                 ? Combobox(
                     <Combobox.Option
                       value={query}
@@ -87,4 +104,5 @@ export default SearchManufacturer;
                       Create "{query}"
                     </Combobox.Option>
                   )
-                : )} */}
+                : )} */
+}
